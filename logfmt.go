@@ -28,12 +28,6 @@ type Logger interface {
 	Error(err error, msg string, kvs ...Kv)
 }
 
-type levelValues struct {
-	Debug string
-	Info  string
-	Error string
-}
-
 // Params sets additional params for logger
 type Params struct {
 	// switch debug mode
@@ -42,31 +36,32 @@ type Params struct {
 
 	// keys for standard fields
 	// empty key remove the field from the line
-	// defaults: lvl, msg, error
+	// defaults: "lvl", "msg", "error"
 	LevelKey string
 	MsgKey   string
 	ErrorKey string
 
 	// values for levels
-	// type is not exported to simplify the api
 	// empty value removes specific level from the line
-	// defaults: debug, info, error
-	Levels levelValues
+	// defaults: "debug", "info", "error"
+	LevelDebug string
+	LevelInfo  string
+	LevelError string
 }
 
 // New create new logger with default params
 // output should be valid, nil update allowed
 func New(output io.Writer, update func(*Params)) Logger {
 	params := &Params{
-		Debug:    true,
+		Debug: true,
+
 		LevelKey: "lvl",
 		MsgKey:   "msg",
 		ErrorKey: "error",
-		Levels: levelValues{
-			Debug: "debug",
-			Info:  "info",
-			Error: "error",
-		},
+
+		LevelDebug: "debug",
+		LevelInfo:  "info",
+		LevelError: "error",
 	}
 	if update != nil {
 		update(params)
@@ -111,18 +106,17 @@ func (l loggerImpl) With(kvs ...Kv) Logger {
 }
 
 func (l loggerImpl) Info(msg string, kvs ...Kv) {
-	l.log(l.params.Levels.Info, msg, nil, kvs)
+	l.log(l.params.LevelInfo, msg, nil, kvs)
 }
 
 func (l loggerImpl) Debug(msg string, kvs ...Kv) {
-	params := *l.params
-	if params.Debug {
-		l.log(params.Levels.Debug, msg, nil, kvs)
+	if l.params.Debug {
+		l.log(l.params.LevelDebug, msg, nil, kvs)
 	}
 }
 
 func (l loggerImpl) Error(err error, msg string, kvs ...Kv) {
 	if err != nil {
-		l.log(l.params.Levels.Error, msg, err, kvs)
+		l.log(l.params.LevelError, msg, err, kvs)
 	}
 }
