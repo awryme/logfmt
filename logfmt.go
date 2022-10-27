@@ -50,8 +50,9 @@ type Params struct {
 }
 
 // New create new logger with default params
-// output should be valid, nil update allowed
-func New(output io.Writer, update func(*Params)) Logger {
+//
+// output should be valid, nil options allowed
+func New(output io.Writer, options func(*Params)) Logger {
 	params := &Params{
 		Debug: true,
 
@@ -63,8 +64,8 @@ func New(output io.Writer, update func(*Params)) Logger {
 		LevelInfo:  "info",
 		LevelError: "error",
 	}
-	if update != nil {
-		update(params)
+	if options != nil {
+		options(params)
 	}
 	return loggerImpl{
 		output: output,

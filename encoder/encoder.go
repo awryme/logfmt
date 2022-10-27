@@ -6,6 +6,7 @@ import (
 )
 
 // Encoder encodes logfmt k=v pairs
+//
 // needs explicit WriteLine() to print log lines
 type Encoder struct {
 	writer    io.Writer
@@ -27,12 +28,14 @@ func (e *Encoder) WriteLine() error {
 }
 
 // WriteKvStr writes string k=v pair
+//
 // space is added between kvs implicitly
 func (e *Encoder) WriteKvStr(key, value string) error {
 	return e.WriteKv([]byte(key), []byte(value))
 }
 
 // WriteKv writes raw bytes k=v pair
+//
 // space is added between kvs implicitly
 func (e *Encoder) WriteKv(key, value []byte) error {
 	if key == nil {

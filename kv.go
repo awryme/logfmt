@@ -18,6 +18,7 @@ func (kv Kv) KvPair() ([]byte, []byte) {
 }
 
 // Delayed logs Kv value, resolved at log time
+//
 // can be used to add values like timestamp/caller for all logs using logger.With()
 func Delayed(f func() Kv) Kv {
 	return Kv{
@@ -42,6 +43,7 @@ func Str(key string, value string) Kv {
 }
 
 // Stringer logs value.String()
+//
 // nil value is ignored
 func Stringer(key string, value fmt.Stringer) Kv {
 	if value == nil {
@@ -51,6 +53,7 @@ func Stringer(key string, value fmt.Stringer) Kv {
 }
 
 // Int logs int values
+//
 // cast to int64 if necessary
 func Int(key string, value int64) Kv {
 	return Kv{
@@ -60,6 +63,7 @@ func Int(key string, value int64) Kv {
 }
 
 // Uint logs uint values
+//
 // cast to uint64 if necessary
 func Uint(key string, value uint64) Kv {
 	return Kv{
@@ -69,6 +73,7 @@ func Uint(key string, value uint64) Kv {
 }
 
 // Float logs float values without a precision limit
+//
 // cast to float64 if necessary
 func Float(key string, value float64) Kv {
 	return Kv{
@@ -85,7 +90,8 @@ func Bool(key string, value bool) Kv {
 	}
 }
 
-// Any logs any value as per fmt.Sprint
+// Any logs any value with fmt.Sprint
+//
 // Added for convenience
 func Any(key string, value interface{}) Kv {
 	return Kv{

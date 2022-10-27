@@ -3,6 +3,7 @@ package encoder
 import "bytes"
 
 // Line represents single log line
+//
 // Adds newline character implicitly
 type Line struct {
 	line    *bytes.Buffer
